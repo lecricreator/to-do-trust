@@ -11,7 +11,6 @@ pub fn show(argc: usize, args: &Vec<String>) {
             return
         }
     };
-
     let file_content = gestionary_file::read_file(&mut file);
     println!("{file_content}");
 }

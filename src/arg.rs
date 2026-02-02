@@ -2,6 +2,7 @@ use crate::action::new;
 use crate::action::show;
 use crate::action::add;
 use crate::action::help;
+use crate::action::remove;
 
 pub fn start_program(argc: usize, args: &Vec<String>){
     let action = &args[1];
@@ -13,6 +14,8 @@ pub fn start_program(argc: usize, args: &Vec<String>){
         let _ = add::add(argc, args);
     }else if action == "help" {
         help::help();
+    }else if action == "remove" {
+        remove::remove(argc, args);
     }else {
         println!("This command doesn't exist in the to-do-rustline.");        
     }
