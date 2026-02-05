@@ -1,4 +1,4 @@
-use std::{fmt::{Error, format}, io::{self, BufRead, BufReader, Write}};
+use std::{fmt::{Error, format}, i32, io::{self, BufRead, BufReader, Write}};
 use crate::gestionary_file::{self};
 
 pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
@@ -18,9 +18,30 @@ pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
     let mut table_line: Vec<String> = vec![];
     for line in reader.lines() {
         let line= line?;
-        println!("{} : {}", index, line);
+        if index > 2 {
+            print!("{} : ", index - 3)
+        }else {
+            print!("    ");
+        }
+        println!("{}", line);
         table_line.push(line);
         index += 1;
+    }
+    println!("Choose the index to remove. Ex 1");
+    let mut input = String::new();
+    std::io::stdin()
+        .read_line(&mut input)
+        .expect("Can not read user input");
+    let transf_input_to_int: i32 = match input.trim().parse::<i32>() {
+        Ok(i) => i,
+        Err(e) => {
+            eprintln!("Invalid number: {}", e);
+            return Ok(());
+        }
+    };
+
+    if transf_input_to_int < 0 {
+        println!("Not a number");
     }
     return Ok(())
 }
