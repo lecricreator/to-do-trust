@@ -14,12 +14,12 @@ pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
         }
     };
     let reader = BufReader::new(&file);
-    let mut index = 0;
+    let mut index = -1;
     let mut table_line: Vec<String> = vec![];
     for line in reader.lines() {
         let line= line?;
-        if index > 2 {
-            print!("{} : ", index - 3)
+        if index > 1 {
+            print!("{} : ", index - 2)
         }else {
             print!("    ");
         }
@@ -27,6 +27,7 @@ pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
         table_line.push(line);
         index += 1;
     }
+    index -= 3;
     println!("Choose the index to remove. Ex 1");
     let mut input = String::new();
     std::io::stdin()
@@ -39,9 +40,8 @@ pub fn remove(argc: usize, args: &Vec<String>) -> io::Result<()>{
             return Ok(());
         }
     };
-
-    if transf_input_to_int < 0 {
-        println!("Not a number");
+    if transf_input_to_int > index {
+        println!("value out of index of the to-do-rustlist.");
     }
     return Ok(())
 }
