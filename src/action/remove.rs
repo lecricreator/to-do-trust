@@ -12,7 +12,7 @@ pub fn remove(argc: usize, args: &Vec<String>){
     };
     let input_index_err:i32;
     let table_line:Vec<String>;
-    (input_index_err, table_line) = gestionary_file::show_and_select_index(file);
+    (input_index_err, table_line) = gestionary_file::show_and_select_index(file, "remove".to_string());
     if input_index_err == -1 {return;}
     let input_index:usize = input_index_err.try_into().unwrap();
     let mut file_at_replace:File = File::options()

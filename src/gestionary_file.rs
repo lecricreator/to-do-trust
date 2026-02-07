@@ -39,7 +39,7 @@ pub fn find_file(args: &Vec<String>) -> Result<File, Error>{
         })
 }
 
-pub fn show_and_select_index(file: File) -> (i32, Vec<String>){
+pub fn show_and_select_index(file: File, action: String) -> (i32, Vec<String>){
     let reader = BufReader::new(&file);
     let mut index = 0;
     let mut table_line: Vec<String> = vec![];
@@ -60,7 +60,7 @@ pub fn show_and_select_index(file: File) -> (i32, Vec<String>){
         index += 1;
     }
     index -= 4;
-    println!("Choose the index to remove. Ex 1");
+    println!("Choose the index for {}. Ex 1", action);
     let mut input = String::new();
     std::io::stdin()
         .read_line(&mut input)
