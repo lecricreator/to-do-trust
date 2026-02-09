@@ -34,13 +34,13 @@ pub fn find_file(args: &String) -> Result<File, Error>{
                 Ok(l) => return Ok(l),
                 Err(e) => e,
             };
+        println!("File {} not found", &args);
         match OpenOptions::new() 
             .read(true)
             .write(true)
-            .open(total_file_name) 
-            {
+            .open(total_file_name.clone()) {
                 Ok(l) => return Ok(l),
-                Err(e) => return Err(e),
+                Err(e) => {println!("File 1 {} not found", total_file_name) ;return Err(e)},
             };
 }
 

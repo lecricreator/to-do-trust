@@ -26,7 +26,7 @@ pub fn start_program(argc: usize, args: &Vec<String>){
     }else if action == "file" {
         delete::delete(argc, args);
     }else if action == "delete" {
-        //complete::complete(argc, args);
+        delete::delete(argc, args);
     }else {
         println!("This command doesn't exist in the to-do-rustline.");
     }

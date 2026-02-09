@@ -7,7 +7,7 @@ pub fn remove(argc: usize, args: &Vec<String>){
     if !errors::verified_arg(argc, 3) {return}
     let file = match gestionary_file::find_file(&args[2]){
         Ok(f) => f,
-        Err(_e) => {errors::print_error(errors::ErrorName::err_file_not_found, args[2].clone()); return}
+        Err(_e) => {errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone()); return}
     };
     let (input_index_err, table_line) = gestionary_file::show_and_select_index(file, "remove".to_string());
     if input_index_err <= -1 {return;}

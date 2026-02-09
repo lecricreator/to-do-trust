@@ -13,7 +13,7 @@ pub fn add(argc: usize, args: &Vec<String>) -> io::Result<()>{
     }
     let mut file = match gestionary_file::find_file(&args[2]){
         Ok(f) => f,
-        Err(_e) => {errors::print_error(errors::ErrorName::err_file_not_found, args[2].clone()); return Ok(())}
+        Err(_e) => {errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone()); return Ok(())}
     };
     let reader = BufReader::new(&file);
     for line in reader.lines() {
