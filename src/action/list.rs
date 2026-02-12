@@ -1,16 +1,20 @@
 use std::fs;
-use std::io;
+use crate::errors;
 
-use crate::action::new;
+use crate::errors::ErrorName;
 
-pub fn list() -> io::Result<()>{
+pub fn list(){
+    let entries = match fs::read_dir(".") {
+        Ok(l) => l, 
+        Err(e) => {errors::print_error(ErrorName::ErrReadDirectory, e.to_string()); return}};
     let mut table_str: Vec<String> = Vec::new();
-    for entry in fs::read_dir(".")? {
-        let entry = entry?;
-        let file_name = entry.file_name();
-        if let Some(name) = file_name.to_str() {
-            if name.ends_with(".todoR") {
-                table_str.push(name.to_string());
+    for entry in entries {
+        if let Ok(entry) = entry {
+            let file_name = entry.file_name();
+            if let Some(name) = file_name.to_str() {
+                if name.ends_with(".todoR") {
+                    table_str.push(name.to_string());
+                }
             }
         }
     }
@@ -18,5 +22,4 @@ pub fn list() -> io::Result<()>{
     for i in table_str {
         println!("{i}");
     }
-    Ok(())
 }

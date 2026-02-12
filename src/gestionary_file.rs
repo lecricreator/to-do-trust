@@ -2,6 +2,8 @@
 use std::{fs::{self, File, OpenOptions}};
 use std::io::{BufRead, BufReader,Read, Write, Error};
 use std::path::Path;
+use colored::Colorize;
+use crate::{action::new, errors};
 
 pub fn read_file(fd: &mut File) -> String{
     let mut content: String = String::new();
@@ -21,7 +23,7 @@ pub fn create_file(name_file: &String){
     .open(&total_name_file)
     .expect("Cannot create the {total_name_file}.");
     println!("Create the file {total_name_file}.\nNow you can add for add goal or show for showing the to-do-rustlist.");
-    let _ = writeln!(file, "{}\nDONE |        TASK        | COMMENTARY        ", &name_file).expect("Cannot write in the file {total_name_file}.");
+    let _ = writeln!(file, "{} / progression: 0/0\nDONE |        TASK        | COMMENTARY        ", &name_file).expect("Cannot write in the file {total_name_file}.");
     _ = writeln!(file,         "-----|--------------------|--------------------------------------------------").expect("Cannot write in the file {total_name_file}.");
 }
 
@@ -84,6 +86,29 @@ pub fn show_and_select_index(file: File, action: String) -> (i32, Vec<String>){
         return (-1, table_line);
     };
     return (transf_input_to_int, table_line);
+}
+
+pub fn replace_file(argc: usize, args: &Vec<String>, modification: fn(&Vec<String>, &File, usize, &usize), action: String) {
+    if !errors::verified_arg(argc, 3) {return}
+    let file = match find_file(&args[2]){
+        Ok(f) => f,
+        Err(_e) => {errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone()); return}
+    };
+    let table_line: Vec<String> = Vec::new();
+    let mut input_index:usize = 0;
+    if action == "remove" || action == "complete task" {
+        let (input_index_err, table_line) = show_and_select_index(file, action);
+        if input_index_err <= -1 {return;}
+        input_index = input_index_err.try_into().unwrap();
+    }else {
+    }
+    let file_at_replace:File = File::options()
+    .write(true)
+    .create(true)
+    .open("replace_file")
+    .expect("Cannot create the replace_file.");
+    modify_file(&table_line, &file_at_replace, input_index, args, modification);
+    return
 }
 
 pub fn modify_file(table_line: &Vec<String>, file_at_replace: &File, input_index:usize, args: &Vec<String>, 
