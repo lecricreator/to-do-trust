@@ -1,3 +1,5 @@
+use std::io::{Error, ErrorKind};
+
 use crate::action::add;
 use crate::action::complete;
 use crate::action::delete;
@@ -8,24 +10,24 @@ use crate::action::remove;
 use crate::action::show;
 use crate::action::uncomplete;
 
-pub fn start_program(args: &[String]) {
-    let Some((action, args)) = args.split_first() else {
-        return;
-    };
 
+pub fn start_program(args: &[String]) -> Result<(), std::io::Error> {
+    let (action, args) = args.split_first().ok_or_else(|| Error::new(ErrorKind::InvalidInput, "Not sufisaly argument."))?;
+    println!("1 is {}", action.as_str());
     match action.as_str() {
-        "new" => new::new_action(args),
-        "show" => show::show(args),
-        "add" => let _ = add::add(args),
+        "new" => new::new_action(args)?,
+        "show" => show::show(args)?,
+        _ => Err(Error::new(ErrorKind::InvalidInput, "Unknown action."))?,
+        /*"add" => let _ = add::add(args),
         "help" => help::help(),
         "remove" => remove::remove(args),
         "complete" => complete::complete(args),
         "uncomplete" => uncomplete::uncomplete(args),
         "delete" => delete::delete(args),
-        "list" => list::list(),
+        "list" => list::list(),*/
     }
-
-    if action == "new" {
+    Ok(())
+    /*if action == "new" {
         new::new_action(argc, args);
     } else if action == "show" {
         show::show(argc, args);
@@ -45,5 +47,5 @@ pub fn start_program(args: &[String]) {
         list::list();
     } else {
         println!("This command doesn't exist in the to-do-rustline.");
-    }
+    }*/
 }

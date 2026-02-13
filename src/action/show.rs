@@ -1,15 +1,14 @@
-use crate::gestionary_file;
-use crate::errors::{self};
+use std::io::{Error, ErrorKind};
 
-pub fn show(argc: usize, args: &Vec<String>) -> Result<(), std::io::Error> {
-    if !errors::verified_arg(argc, 3) { return };
-    
-    let mut file = match gestionary_file::find_file(&args[2]){
-        Ok(f) => f,
-        Err(_e) => {errors::print_error(errors::ErrorName::ErrFileNotFound, args[2].clone()); return}
+use crate::gestionary_file::{self, open_file};
+//use crate::errors;
+
+pub fn show(args: &[String]) -> Result<(), Error> {
+    let Some(file_name) = args.first() else {
+        return Err(Error::new(ErrorKind::InvalidInput, "Not sufisaly argument, need fileName."))
     };
-    let file_content = gestionary_file::read_file(&mut file)?;
+    let mut fd =  open_file(file_name)?;
+    let file_content = gestionary_file::read_file(&mut fd)?;
     println!("{file_content}");
-
     Ok(())
 }

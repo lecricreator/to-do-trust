@@ -1,13 +1,15 @@
+use std::io::{Error, ErrorKind};
+
 mod action;
 mod arg;
 pub mod errors;
 pub mod gestionary_file;
 
-fn main() {
+fn main() -> Result<(), std::io::Error>{
     let args: Vec<String> = std::env::args().collect();
-    if args.len() <= 1 {
-        println!("To-do-rustline need minimum 1 argument for execute the program.");
-        return;
-    }
-    arg::start_program(&args[1..]);
+
+    let (_original_path, args) = args.split_first().ok_or_else(|| Error::new(ErrorKind::InvalidInput, "Not sufisaly argument."))?;
+    println!("0 is {_original_path}");
+    arg::start_program(&args[0..])?;
+    Ok(())
 }

@@ -11,6 +11,19 @@ pub fn read_file(fd: &mut File) -> Result<String, std::io::Error> {
     Ok(content)
 }
 
+pub fn open_file(file_name: &String) -> Result<File, std::io::Error> {
+    let total_file_name = format!("{file_name}.todoR");
+    if let Ok(file) = File::open(total_file_name) 
+    {
+        return Ok(file)
+    }else {
+        match File::open(file_name) {
+            Ok(f) => Ok(f),
+            Err(e) => Err(e),
+        }
+    }
+}
+
 pub fn create_file(name_file: &String) {
     let total_name_file: String = format!("{name_file}.todoR");
     if Path::new(&total_name_file).exists() {
