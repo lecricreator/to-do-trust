@@ -2,7 +2,7 @@ use std::{fs};
 use crate::manage_file::{self};
 use crate::errors::{self};
 
-pub fn delete(args: &[String]) -> Result<(), errors::MyError> {
+pub fn delete_action(args: &[String]) -> Result<(), errors::MyError> {
     let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
     match manage_file::open_file(file_name) {
         Ok(l) => l,

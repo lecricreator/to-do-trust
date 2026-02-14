@@ -1,7 +1,7 @@
 use std::{fs::{self}};
 use crate::errors;
 
-pub fn list() -> Result<(), errors::MyError>{
+pub fn list_action() -> Result<(), errors::MyError>{
     let entries = match fs::read_dir(".") {
         Ok(l) => l, 
         Err(_) => return Err(errors::MyError::ReadDirectory)

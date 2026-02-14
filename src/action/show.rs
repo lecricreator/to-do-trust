@@ -1,7 +1,7 @@
 use crate::manage_file::{self, open_file};
 use crate::errors;
 
-pub fn show(args: &[String]) -> Result<(), errors::MyError> {
+pub fn show_action(args: &[String]) -> Result<(), errors::MyError> {
     let Some(file_name) = args.first() else {
         return Err(errors::MyError::FileNotExist)
     };

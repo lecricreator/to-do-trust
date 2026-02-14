@@ -13,6 +13,5 @@
 Create my own to-do-list in Rust for learnig Rust.
 
 PROBLEME :
-- Error when you try to remove when list is empty
-- add a progression list.
+- Draw result after remove add complete and uncomplet after tap input.
 - verified if it already complete or uncomplete for action complete and uncomplete.

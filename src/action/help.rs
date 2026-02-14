@@ -1,4 +1,4 @@
-pub fn help() {
+pub fn help_action() {
     println!("To-do-RList is a to-do-list in the terminal.\n");
     println!("new        : Create a new to-do-RList.
             todoRList new name_of_todoRList_file.\n");

@@ -1,4 +1,4 @@
-use crate::errors;
+use crate::{HEADER_SIZE, errors};
 
 use colored::Colorize;
 use std::fs::{self, File};
@@ -8,7 +8,6 @@ use std::path::Path;
 pub fn read_file(fd: &mut File) -> Result<String, errors::MyError> {
     let mut content = String::new();
     fd.read_to_string(&mut content)?;
-    
     Ok(content)
 }
 
@@ -65,9 +64,9 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
             nbr_complete += 1;
         }
         if index > 2 && index < 10 {
-            print!(" {} :", index - 3)
+            print!(" {} :", index - HEADER_SIZE)
         } else if index >= 10 {
-            print!("{} :", index - 3)
+            print!("{} :", index - HEADER_SIZE)
         } else {
             print!("    ");
         }
@@ -76,7 +75,6 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
         table_line.push(line_string);
         index += 1;
     }
-    index = 0;
     println!("Choose the index for {}. Ex 1", action.blue());
     let mut input = String::new();
     std::io::stdin()
@@ -88,25 +86,25 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
             return None;
         }
     };
-    if transf_input_to_int + 1 > table_line.len() - 3 {
+    if transf_input_to_int + 1 > table_line.len() - HEADER_SIZE {
         println!("value out of index of the to-do-rustlist.");
         return None;
     };
     if action == "remove" {
-        if table_line[transf_input_to_int + 3].starts_with("✅") {
+        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
             nbr_complete -= 1;
         }
-        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - 4);
+        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE + 1);
     } else if action == "complete task" {
-        if table_line[transf_input_to_int + 3].starts_with("❌") {
+        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("❌") {
             nbr_complete += 1;
         }
-        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - 3);
+        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE);
     } else if action == "uncomplete task" {
-        if table_line[transf_input_to_int + 3].starts_with("✅") {
+        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
             nbr_complete -= 1;
         }
-        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - 3);
+        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE);
     }
     return Some((transf_input_to_int, table_line));
 }

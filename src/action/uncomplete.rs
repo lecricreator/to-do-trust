@@ -3,7 +3,7 @@ use std::fs::{File};
 use crate::manage_file;
 use crate::errors::{self};
 
-pub fn uncomplete(args: &[String]) -> Result<(), errors::MyError> {
+pub fn uncomplete_action(args: &[String]) -> Result<(), errors::MyError> {
     let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
     manage_file::replace_file(file_name, uncomplete_file, "uncomplete task")?;
     Ok(())

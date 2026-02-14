@@ -6,7 +6,7 @@ use std::{
     io::{BufRead, BufReader, Write},
 };
 
-pub fn add(args: &[String]) -> Result<(), errors::MyError> {
+pub fn add_action(args: &[String]) -> Result<(), errors::MyError> {
     let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
     replace_file(file_name, add_in_file, "add")?;
     Ok(())
@@ -50,7 +50,6 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
         }
         println!("Invalid value, try again");
     };
-
     println!(
         "write the commentary for add in the to-do-RList. It's not obligatory. Ex commentary1"
     );

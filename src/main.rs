@@ -3,6 +3,8 @@ mod arg;
 pub mod errors;
 pub mod manage_file;
 
+const HEADER_SIZE: usize = 3;
+
 fn main() -> Result<(), errors::MyError>{
     let args: Vec<String> = std::env::args().collect();
 
