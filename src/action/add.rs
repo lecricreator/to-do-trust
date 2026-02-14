@@ -17,27 +17,15 @@ fn add_in_file(
     mut file_at_replace: &File,
     _input_index: usize,
     t: &usize,
-) {
+) -> Result<(), errors::MyError>{
     let line = format!("{}", table_line[*t]);
     file_at_replace
-        .write(line.as_bytes())
-        .expect("Can not write in file");
+        .write(line.as_bytes())?;
+    Ok(())
 }
 
 pub fn add_task(file: File, name_file: String) -> Option<Vec<String>> {
     let reader = BufReader::new(&file);
-    // let mut table_line: Vec<String> = vec![];
-    // let mut nbr_complete: u8 = 0;
-    // for line in reader.lines() {
-    //     let line_string = line.ok()?;
-    //     println!("{line_string}");
-    //     if line_string.starts_with("\u{2705}") {
-    //         nbr_complete += 1;
-    //     }
-    //     line_string += "\n";
-    //     table_line.push(line_string);
-    // }
-
     let mut nbr_complete: u8 = 0;
     let mut table_line = reader
         .lines()

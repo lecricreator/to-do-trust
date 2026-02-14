@@ -14,10 +14,10 @@ fn remove_line(
     mut file_at_replace: &File,
     input_index: usize,
     t: &usize,
-) {
+) -> Result<(), errors::MyError>{
     if *t != input_index + 3 {
         file_at_replace
-            .write(table_line[*t].as_bytes())
-            .expect("Can not write in file");
+            .write(table_line[*t].as_bytes())?;
     }
+    Ok(())
 }

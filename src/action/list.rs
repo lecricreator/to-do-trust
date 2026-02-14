@@ -4,7 +4,7 @@ use crate::errors;
 pub fn list() -> Result<(), errors::MyError>{
     let entries = match fs::read_dir(".") {
         Ok(l) => l, 
-        Err(_) => return Err(errors::MyError::ErrReadDirectory)
+        Err(_) => return Err(errors::MyError::ReadDirectory)
     };
     let mut table_str: Vec<String> = Vec::new();
     for entry in entries {

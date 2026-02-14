@@ -1,34 +1,35 @@
 use crate::errors;
 use colored::Colorize;
 use std::fs::{self, File, OpenOptions};
-use std::io::{BufRead, BufReader, Error, ErrorKind, Read, Write};
+use std::io::{BufRead, BufReader, Read, Write};
 use std::path::Path;
 
-pub fn read_file(fd: &mut File) -> Result<String, std::io::Error> {
+pub fn read_file(fd: &mut File) -> Result<String, errors::MyError> {
     let mut content = String::new();
     fd.read_to_string(&mut content)?;
     
     Ok(content)
 }
 
-pub fn open_file(file_name: &String) -> Result<File, std::io::Error> {
+pub fn open_file(file_name: &String) -> Result<File, errors::MyError> {
     let total_file_name = format!("{file_name}.todoR");
-    if let Ok(file) = File::open(total_file_name) 
-    {
-        return Ok(file)
-    }else {
-        match File::open(file_name) {
-            Ok(f) => Ok(f),
-            Err(e) => {println!("{}", "This argument doesn't exist".red()); Err(e)},
+        if Path::new(&total_file_name).exists() {
+            return Ok(File::open(total_file_name)?)
+        }else if Path::new(&file_name).exists() {
+            return Ok(File::open(file_name)?)
         }
-    }
+    println!("{}", "This argument file doesn't exist".red());
+    Err(errors::MyError::FileNotExist)
 }
 
-pub fn create_file(name_file: &String) -> Result<File, std::io::Error>{
+pub fn create_file(name_file: &String) -> Result<File, errors::MyError>{
     let total_name_file: String = format!("{name_file}.todoR");
     if Path::new(&total_name_file).exists() {
-        println!("{}", "No need to create this files. The {total_name_file} is already exist.".red());
-        return Err(Error::new(ErrorKind::InvalidInput, "Not sufisaly argument, need fileName."))
+        println!("{}{}{}", "No need to create this files. The ".red(), total_name_file.red(), " is already exist.".red());
+        return Err(errors::MyError::FileAlreadyExist)
+    } else if Path::new(&name_file).exists() {
+        println!("{}{}{}", "No need to create this files. The ".red(), name_file.red(), " is already exist.".red());
+        return Err(errors::MyError::FileAlreadyExist)
     }
     let mut file = File::options()
         .write(true)
@@ -47,22 +48,6 @@ pub fn create_file(name_file: &String) -> Result<File, std::io::Error>{
         "-----|--------------------|--------------------------------------------------"
     )?;
     Ok(file)
-}
-
-pub fn find_file(args: &String) -> Result<File, std::io::Error> {
-    let total_file_name: String = format!("{}.todoR", &args);
-    match OpenOptions::new().read(true).write(true).open(&args) {
-        Ok(l) => return Ok(l),
-        Err(e) => e,
-    };
-    match OpenOptions::new()
-        .read(true)
-        .write(true)
-        .open(total_file_name.clone())
-    {
-        Ok(l) => return Ok(l),
-        Err(e) => return Err(e),
-    };
 }
 
 pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<String>)> {
@@ -109,20 +94,20 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
 
 pub fn replace_file(
     file_name: &String,
-    modification: fn(&Vec<String>, &File, usize, &usize),
+    modification: fn(&Vec<String>, &File, usize, &usize) -> Result<(), errors::MyError> ,
     action: &str) -> Result<(), errors::MyError>{
-    let file = find_file(file_name)?;
+    let file = open_file(file_name)?;
     let (input_index, table_line) = match action {
         "remove" | "complete task" | "uncomplete task" => {
             let Some(res) = show_and_select_index(file, action) else {
-                return Err(errors::MyError::ErrBadInput);
+                return Err(errors::MyError::BadInput);
             };
             res
         },
         "add" => {
             use crate::action::add;
             let Some(table_line) = add::add_task(file, file_name.clone()) else {
-                return Err(errors::MyError::ErrBadInput);
+                return Err(errors::MyError::BadInput);
             };
             (0, table_line)
         },
@@ -131,8 +116,7 @@ pub fn replace_file(
     let file_at_replace: File = File::options()
         .write(true)
         .create(true)
-        .open("replace_file")
-        .expect("Cannot create the replace_file.");
+        .open("replace_file")?;
 
     modify_file(
         &table_line,
@@ -140,7 +124,7 @@ pub fn replace_file(
         input_index,
         file_name,
         modification,
-    );
+    )?;
     Ok(())
 }
 
@@ -149,11 +133,12 @@ pub fn modify_file(
     file_at_replace: &File,
     input_index: usize,
     args: &String,
-    f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize),
-) {
+    f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize) -> Result<(), errors::MyError>,
+) -> Result<(), errors::MyError>{
     for t in 0..table_line.len() {
-        f(&table_line, &file_at_replace, input_index, &t);
+        f(&table_line, &file_at_replace, input_index, &t)?;
     }
     let name_old_file: String = format!("{}.todoR", args);
     fs::rename("replace_file", name_old_file).expect("Cannot rename file. Please contact the dev.");
+    Ok(())
 }

@@ -16,15 +16,19 @@ pub enum ErrorName {
 #[derive(Error, Debug)]
 pub enum MyError {
     #[error("Not enough argument. Filename needed.")]
-    FileNameNeeded,
+    FileNotExist,
+    #[error("This file already exist.")]
+    FileAlreadyExist,
+    #[error("Their not suffisaly argument.")]
+    NotSuffisalyArg,
     #[error("Not enough argument. Action needed.")]
     ActionNeeded,
     #[error("Canno't read the directory.")]
-    ErrReadDirectory,
+    ReadDirectory,
     #[error("Bad input")]
-    ErrBadInput,
+    BadInput,
     #[error("Len of the task is too big.")]
-    ErrLenTooBig,
+    LenTooBig,
     #[error("This action does'nt exist. Whrite help for have all action.")]
     ActionNotExist,
     #[error("Canno't open the file.")]

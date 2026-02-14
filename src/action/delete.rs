@@ -4,7 +4,7 @@ use crate::errors::{self};
 
 pub fn delete(args: &[String]) -> Result<(), errors::MyError> {
     let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
-    match manage_file::find_file(file_name) {
+    match manage_file::open_file(file_name) {
         Ok(l) => l,
         Err(_e) => {return Err(errors::MyError::ConnotOpenFile)},
     };
