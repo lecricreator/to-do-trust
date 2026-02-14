@@ -24,7 +24,7 @@ fn add_in_file(
     Ok(())
 }
 
-pub fn add_task(file: File, name_file: String) -> Option<Vec<String>> {
+pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
     let reader = BufReader::new(&file);
     let mut nbr_complete: u8 = 0;
     let mut table_line = reader
@@ -75,7 +75,7 @@ pub fn add_task(file: File, name_file: String) -> Option<Vec<String>> {
     );
     table_line.push(content_file);
     table_line[0] = format!(
-        "{name_file}.todoR | progression: {}/{}\n",
+        "progression: {}/{}\n",
         nbr_complete,
         table_line.len() - 3
     );

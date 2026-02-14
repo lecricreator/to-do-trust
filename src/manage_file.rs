@@ -41,8 +41,7 @@ pub fn create_file(name_file: &String) -> Result<File, errors::MyError>{
     );
     let _ = writeln!(
         file,
-        "{} / progression: 0/0\nDONE |        TASK        | COMMENTARY        ",
-        &name_file
+        "progression: 0/0\nDONE |        TASK        | COMMENTARY        "
     )?;
     _ = writeln!(
         file,
@@ -56,11 +55,15 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
     let mut index = 0;
     let mut table_line: Vec<String> = vec![];
     let mut line_string: String;
+    let mut nbr_complete = 0;
     for line in reader.lines() {
         line_string = match line {
             Ok(l) => l,
             Err(_) => return None,
         };
+        if line_string.starts_with('✅') {
+            nbr_complete += 1;
+        }
         if index > 2 && index < 10 {
             print!(" {} :", index - 3)
         } else if index >= 10 {
@@ -73,8 +76,8 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
         table_line.push(line_string);
         index += 1;
     }
-    index -= 4;
-    println!("Choose the index for {}. Ex 1", action);
+    index = 0;
+    println!("Choose the index for {}. Ex 1", action.blue());
     let mut input = String::new();
     std::io::stdin()
         .read_line(&mut input).err();
@@ -85,10 +88,26 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
             return None;
         }
     };
-    if transf_input_to_int > index {
+    if transf_input_to_int + 1 > table_line.len() - 3 {
         println!("value out of index of the to-do-rustlist.");
         return None;
     };
+    if action == "remove" {
+        if table_line[transf_input_to_int + 3].starts_with("✅") {
+            nbr_complete -= 1;
+        }
+        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - 4);
+    } else if action == "complete task" {
+        if table_line[transf_input_to_int + 3].starts_with("❌") {
+            nbr_complete += 1;
+        }
+        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - 3);
+    } else if action == "uncomplete task" {
+        if table_line[transf_input_to_int + 3].starts_with("✅") {
+            nbr_complete -= 1;
+        }
+        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - 3);
+    }
     return Some((transf_input_to_int, table_line));
 }
 
@@ -102,6 +121,7 @@ pub fn replace_file(
             let Some(res) = show_and_select_index(file, action) else {
                 return Err(errors::MyError::BadInput);
             };
+            
             res
         },
         "add" => {
