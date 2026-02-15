@@ -18,6 +18,7 @@ fn remove_line(
 ) -> Result<(), errors::MyError>{
     if *t != input_index + HEADER_SIZE {
         file_at_replace.write(table_line[*t].as_bytes())?;
+        print!("{}", table_line[*t]);
     }
     Ok(())
 }

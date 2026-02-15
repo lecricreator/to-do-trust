@@ -19,8 +19,7 @@ fn add_in_file(
     t: &usize,
 ) -> Result<(), errors::MyError>{
     let line = format!("{}", table_line[*t]);
-    file_at_replace
-        .write(line.as_bytes())?;
+    file_at_replace.write(line.as_bytes())?;
     Ok(())
 }
 
@@ -31,8 +30,6 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
         .lines()
         .filter_map(|line| {
             let mut line_string = line.ok()?;
-
-            println!("{line_string}");
             if line_string.starts_with('✅') {
                 nbr_complete += 1;
             }
@@ -41,7 +38,6 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
             Some(line_string)
         })
         .collect::<Vec<String>>();
-
     println!("\nwrite the task for add in the to-do-RList. Ex task1");
     let mut input_task = String::new();
     let mut len_input_task = loop {

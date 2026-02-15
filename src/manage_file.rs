@@ -1,3 +1,4 @@
+use crate::errors::MyError;
 use crate::{HEADER_SIZE, errors};
 
 use colored::Colorize;
@@ -49,7 +50,7 @@ pub fn create_file(name_file: &String) -> Result<File, errors::MyError>{
     Ok(file)
 }
 
-pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<String>)> {
+pub fn show_and_select_index(file: File, action: &str) -> Result<(usize, Vec<String>),  errors::MyError> {
     let reader = BufReader::new(&file);
     let mut index = 0;
     let mut table_line: Vec<String> = vec![];
@@ -58,7 +59,7 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
     for line in reader.lines() {
         line_string = match line {
             Ok(l) => l,
-            Err(_) => return None,
+            Err(e) => return Err(MyError::IoError(e)),
         };
         if line_string.starts_with('✅') {
             nbr_complete += 1;
@@ -83,12 +84,11 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
         Ok(i) => i,
         Err(e) => {
             eprintln!("Invalid number: {}", e);
-            return None;
+            return Err(MyError::CannotParse);
         }
     };
     if transf_input_to_int + 1 > table_line.len() - HEADER_SIZE {
-        println!("value out of index of the to-do-rustlist.");
-        return None;
+        return Err(errors::MyError::ValueOutIndex);
     };
     if action == "remove" {
         if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
@@ -98,15 +98,19 @@ pub fn show_and_select_index(file: File, action: &str) -> Option<(usize, Vec<Str
     } else if action == "complete task" {
         if table_line[transf_input_to_int + HEADER_SIZE].starts_with("❌") {
             nbr_complete += 1;
+        } else {
+            return Err(errors::MyError::AlreadyComplete)
         }
         table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE);
     } else if action == "uncomplete task" {
         if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
             nbr_complete -= 1;
+        } else {
+            return Err(errors::MyError::AlreadyUncomplete)
         }
         table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE);
     }
-    return Some((transf_input_to_int, table_line));
+    return Ok((transf_input_to_int, table_line));
 }
 
 pub fn replace_file(
@@ -116,10 +120,7 @@ pub fn replace_file(
     let file = open_file(file_name)?;
     let (input_index, table_line) = match action {
         "remove" | "complete task" | "uncomplete task" => {
-            let Some(res) = show_and_select_index(file, action) else {
-                return Err(errors::MyError::BadInput);
-            };
-            
+            let res = show_and_select_index(file, action)?;
             res
         },
         "add" => {
@@ -154,7 +155,7 @@ pub fn modify_file(
     f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize) -> Result<(), errors::MyError>,
 ) -> Result<(), errors::MyError>{
     for t in 0..table_line.len() {
-        f(&table_line, &file_at_replace, input_index, &t)?;
+        f(table_line, &file_at_replace, input_index, &t)?;
     }
     let total_file_name: String = format!("{}.todoR", file_name);
     if Path::new(&total_file_name).exists() {

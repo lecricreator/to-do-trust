@@ -35,7 +35,15 @@ pub enum MyError {
     ConnotOpenFile,
     #[error("Canno't remove the file.")]
     ConnotRemoveFile,
-    #[error("I/O error occurred")]
+    #[error("This is already complete.")]
+    AlreadyComplete,
+    #[error("This is already uncomplete.")]
+    AlreadyUncomplete,
+    #[error("It cannot parse to another type.")]
+    CannotParse,
+    #[error("value out of index.")]
+    ValueOutIndex,
+    #[error("I/O error occurred.")]
     IoError(#[from] std::io::Error),
 }
 
