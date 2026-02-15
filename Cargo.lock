@@ -271,15 +271,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "teste"
-version = "0.1.0"
-dependencies = [
- "colored",
- "tempfile",
- "thiserror",
-]
-
-[[package]]
 name = "thiserror"
 version = "2.0.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -297,6 +288,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "todotrust_dev"
+version = "0.1.0"
+dependencies = [
+ "colored",
+ "tempfile",
+ "thiserror",
 ]
 
 [[package]]

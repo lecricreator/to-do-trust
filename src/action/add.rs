@@ -33,14 +33,14 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
             if line_string.starts_with('✅') {
                 nbr_complete += 1;
             }
+            println!("{}", line_string);
             line_string += "\n";
-
             Some(line_string)
         })
         .collect::<Vec<String>>();
     println!("\nwrite the task for add in the to-do-RList. Ex task1");
     let mut input_task = String::new();
-    let mut len_input_task = 
+    let len_input_task = 
     loop {
         if let Ok(len) = std::io::stdin().read_line(&mut input_task) {
             break len;
@@ -58,8 +58,8 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
     std::io::stdin()
         .read_line(&mut input_commentary).err();
 
-    if len_input_task >= 21 {
-        input_task = format!("{}.", &input_task[..18]);
+    if len_input_task >= 20 {
+        input_task = format!("{}.", &input_task[..17]);
     }
     let content_file = format!(
         "❌   | {:^19}| {}\n",
