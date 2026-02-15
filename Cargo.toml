@@ -3,6 +3,8 @@ name = "todotrust_dev"
 readme = "README.md"
 version = "0.1.0"
 edition = "2024"
+repository = "https://github.com/lecricreator/todotrust"
+license-file = "LICENSE.txt"
 
 [dependencies]
 colored = "3"
