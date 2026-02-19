@@ -41,10 +41,12 @@ echo $SHELL
 On Bash :
 ```
 printf 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.bashrc"
+printf 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.bashrc"
 source ~/.bashrc
 ```
 On zsh :
 ```
 printf 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.zshrc"
+printf 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.zshrc"
 source ~/.zshrc
 ```
