@@ -43,10 +43,14 @@ pub enum MyError {
     CannotParse,
     #[error("Input task is empty.")]
     InputTaskEmpty,
+    #[error("Dev make a mistake in function rename. Let a file replace_file. You can remove it.")]
+    ReplaceFile,
     #[error("value out of index.")]
     ValueOutIndex,
     #[error("I/O error occurred.")]
     IoError(#[from] std::io::Error),
+    #[error("varrerror env")]
+    EnvError(#[from] std::env::VarError),
 }
 
 pub fn print_error (err: ErrorName, err_msg: String) {

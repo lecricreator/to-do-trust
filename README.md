@@ -38,13 +38,13 @@ Verified if your on bash or zsh with this command :
 ```
 echo $SHELL
 ```
-On Bash :
+If you're on Bash :
 ```
 printf 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.bashrc"
 printf 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.bashrc"
 source ~/.bashrc
 ```
-On zsh :
+If you're on zsh :
 ```
 printf 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.zshrc"
 printf 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.zshrc"

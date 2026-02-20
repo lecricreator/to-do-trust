@@ -1,5 +1,6 @@
 use crate::errors::MyError;
 use crate::{HEADER_SIZE, errors};
+use std::env;
 
 use colored::Colorize;
 use std::fs::{self, File};
@@ -13,31 +14,36 @@ pub fn read_file(fd: &mut File) -> Result<String, errors::MyError> {
 }
 
 pub fn open_file(file_name: &String) -> Result<File, errors::MyError> {
-    let total_file_name = format!("{file_name}.todoR");
-        if Path::new(&total_file_name).exists() {
-            return Ok(File::open(total_file_name)?)
-        }else if Path::new(&file_name).exists() {
-            return Ok(File::open(file_name)?)
-        }
+    let todotrust_path = env::var("TODORUST_FILE")?;
+    let total_file_name = format!("{todotrust_path}/{file_name}.todoR");
+    let current_file_name = format!("{todotrust_path}/{file_name}");
+    println!("{}", total_file_name);
+    if Path::new(&total_file_name).exists() {
+        return Ok(File::open(total_file_name)?)
+    }else if Path::new(&current_file_name).exists() {
+        return Ok(File::open(current_file_name)?)
+    }
     println!("{}", "This argument file doesn't exist".red());
     Err(errors::MyError::FileNotExist)
 }
 
 pub fn create_file(name_file: &String) -> Result<File, errors::MyError>{
-    let total_name_file: String = format!("{name_file}.todoR");
-    if Path::new(&total_name_file).exists() {
-        println!("{}{}{}", "No need to create this files. The ".red(), total_name_file.red(), " is already exist.".red());
+    let todotrust_path = env::var("TODORUST_FILE")?;
+    let total_file_name = format!("{todotrust_path}/{name_file}.todoR");
+    let current_file_name = format!("{todotrust_path}/{name_file}");
+    if Path::new(&total_file_name).exists() {
+        println!("{}{}{}", "No need to create this files. The ".red(), total_file_name.red(), " is already exist.".red());
         return Err(errors::MyError::FileAlreadyExist)
-    } else if Path::new(&name_file).exists() {
-        println!("{}{}{}", "No need to create this files. The ".red(), name_file.red(), " is already exist.".red());
+    } else if Path::new(&current_file_name).exists() {
+        println!("{}{}{}", "No need to create this files. The ".red(), current_file_name.red(), " is already exist.".red());
         return Err(errors::MyError::FileAlreadyExist)
     }
     let mut file = File::options()
         .write(true)
         .create(true)
-        .open(&total_name_file)?;
+        .open(&total_file_name)?;
     println!(
-        "Create the file {total_name_file}.\nNow you can add for add goal or show for showing the to-do-rustlist."
+        "Create the file {total_file_name}.\nNow you can add for add goal or show for showing the to-do-rustlist."
     );
     let _ = writeln!(
         file,
@@ -132,10 +138,12 @@ pub fn replace_file(
         },
         _ => todo!()
     };
+    let todotrust_path = env::var("TODORUST_FILE")?;
+    let total_file_replace = format!("{todotrust_path}/replace_file");
     let file_at_replace: File = File::options()
         .write(true)
         .create(true)
-        .open("replace_file")?;
+        .open(&total_file_replace)?;
 
     modify_file(
         &table_line,
@@ -143,6 +151,7 @@ pub fn replace_file(
         input_index,
         file_name,
         modification,
+        &total_file_replace
     )?;
     Ok(())
 }
@@ -153,15 +162,23 @@ pub fn modify_file(
     input_index: usize,
     file_name: &String,
     f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize) -> Result<(), errors::MyError>,
+    total_file_replace: &String
 ) -> Result<(), errors::MyError> {
     for t in 0..table_line.len() {
         f(table_line, &file_at_replace, input_index, &t)?;
     }
-    let total_file_name: String = format!("{}.todoR", file_name);
+    let todotrust_path = env::var("TODORUST_FILE")?;
+    let total_file_name = format!("{todotrust_path}/{file_name}.todoR");
+    let current_file_name = format!("{todotrust_path}/{file_name}");
     if Path::new(&total_file_name).exists() {
-        fs::rename("replace_file", total_file_name)?;
-    }else if Path::new(&file_name).exists() {
-        fs::rename("replace_file", file_name)?;
+        fs::rename(total_file_replace, total_file_name)?;
+        return Ok(());
+    }else if Path::new(&current_file_name).exists() {
+        fs::rename(total_file_replace, current_file_name)?;
+        return Ok(());
     }
-    Ok(())
+    else {
+        println!("{total_file_name} / {current_file_name}");
+        Err(MyError::ReplaceFile)
+    }
 }
