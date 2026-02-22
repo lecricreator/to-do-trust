@@ -40,13 +40,13 @@ echo $SHELL
 ```
 If you're on Bash :
 ```
-printf 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.bashrc"
-printf 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.bashrc"
+echo 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.bashrc"
+echo 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.bashrc"
 source ~/.bashrc
 ```
 If you're on zsh :
 ```
-printf 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.zshrc"
-printf 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.zshrc"
+echo 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.zshrc"
+echo 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.zshrc"
 source ~/.zshrc
 ```
