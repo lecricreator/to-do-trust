@@ -1,4 +1,3 @@
-use colored::Colorize;
 use thiserror::Error;
 
 #[derive(Error, Debug)]

@@ -100,7 +100,7 @@ pub fn show_and_select_index(file: File, action: &str) -> Result<(usize, Vec<Str
         if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
             nbr_complete -= 1;
         }
-        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE + 1);
+        table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE - 1);
     } else if action == "complete task" {
         if table_line[transf_input_to_int + HEADER_SIZE].starts_with("❌") {
             nbr_complete += 1;
