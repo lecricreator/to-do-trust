@@ -140,11 +140,10 @@ pub fn replace_file(
     };
     let todotrust_path = env::var("TODORUST_FILE")?;
     let total_file_replace = format!("{todotrust_path}/replace_file");
-    let file_at_replace: File = File::options()
+let file_at_replace: File = File::options()
         .write(true)
         .create(true)
         .open(&total_file_replace)?;
-
     modify_file(
         &table_line,
         &file_at_replace,
@@ -161,9 +160,8 @@ pub fn modify_file(
     file_at_replace: &File,
     input_index: usize,
     file_name: &String,
-    f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize) -> Result<(), errors::MyError>,
-    total_file_replace: &String
-) -> Result<(), errors::MyError> {
+    f: fn(table_line: &Vec<String>, file_at_replace: &File, input_index: usize, t: &usize) -> Result<(), errors::MyError>, total_file_replace: &String)
+    -> Result<(), errors::MyError> {
     for t in 0..table_line.len() {
         f(table_line, &file_at_replace, input_index, &t)?;
     }
