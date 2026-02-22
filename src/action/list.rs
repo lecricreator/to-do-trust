@@ -1,8 +1,10 @@
 use std::{fs::{self}};
 use crate::errors;
+use std::env;
 
 pub fn list_action() -> Result<(), errors::MyError>{
-    let entries = match fs::read_dir(".") {
+    let todotrust_path = env::var("TODORUST_FILE")?;
+    let entries = match fs::read_dir(todotrust_path) {
         Ok(l) => l, 
         Err(_) => return Err(errors::MyError::ReadDirectory)
     };
