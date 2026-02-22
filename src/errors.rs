@@ -28,19 +28,21 @@ pub enum ErrArg {
     ArgNeedAction,
     #[error("Need a file to modify the to-do-trust.")]
     ArgNeedFile,
+    #[error("No argument. For a reason i don't know you reussised to call todotrus without argument. Contact me for soy me how.")]
+    NoArgContactMe,
 }
 
 #[derive(Error, Debug)]
 pub enum MyError {
-    #[error("I/O error occurred.")]
+    #[error("I/O error occurred : {0}")]
     IoError(#[from] std::io::Error),
-    #[error("varrerror env")]
+    #[error("varrerror env : {0}")]
     EnvError(#[from] std::env::VarError),
-    #[error("Error of file.")]
+    #[error("Error of file : {0}")]
     ErrFile(#[from] ErrFile),
-    #[error("Error of input.")]
+    #[error("Error of input : {0}")]
     ErrInput(#[from] ErrInput),
-    #[error("Error of argument.")]
+    #[error("Error of argument : {0}")]
     ErrArg(#[from] ErrArg),
     #[error("Canno't read the directory.")]
     ReadDirectory,
