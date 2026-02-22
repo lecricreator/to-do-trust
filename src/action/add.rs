@@ -7,7 +7,7 @@ use std::{
 };
 
 pub fn add_action(args: &[String]) -> Result<(), errors::MyError> {
-    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ErrArg(errors::ErrArg::ArgNeedFile))?;
     replace_file(file_name, add_in_file, "add")?;
     Ok(())
 }

@@ -5,7 +5,7 @@ use std::fs::File;
 use std::io::Write;
 
 pub fn remove_action(args: &[String]) -> Result<(), errors::MyError> {
-    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ErrArg(errors::ErrArg::ArgNeedFile))?;
     manage_file::replace_file(file_name, remove_line, "remove")?;
     Ok(())
 }

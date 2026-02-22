@@ -11,7 +11,7 @@ use crate::errors;
 
 
 pub fn start_program(args: &[String]) -> Result<(), errors::MyError> {
-    let (action, args) = args.split_first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    let (action, args) = args.split_first().ok_or_else(|| errors::MyError::ErrArg(errors::ErrArg::ArgNeedFile))?;
     match action.as_str() {
         "new" => new::new_action(args)?,
         "show" => show::show_action(args)?,

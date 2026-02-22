@@ -1,7 +1,7 @@
 use crate::errors::MyError;
 use crate::{HEADER_SIZE, errors};
-use std::env;
 
+use std::env;
 use colored::Colorize;
 use std::fs::{self, File};
 use std::io::{BufRead, BufReader, Read, Write};
@@ -24,7 +24,7 @@ pub fn open_file(file_name: &String) -> Result<File, errors::MyError> {
         return Ok(File::open(current_file_name)?)
     }
     println!("{}", "This argument file doesn't exist".red());
-    Err(errors::MyError::FileNotExist)
+    Err(errors::MyError::ErrFile(errors::ErrFile::FileNotExist))
 }
 
 pub fn create_file(name_file: &String) -> Result<File, errors::MyError>{
@@ -33,10 +33,10 @@ pub fn create_file(name_file: &String) -> Result<File, errors::MyError>{
     let current_file_name = format!("{todotrust_path}/{name_file}");
     if Path::new(&total_file_name).exists() {
         println!("{}{}{}", "No need to create this files. The ".red(), total_file_name.red(), " is already exist.".red());
-        return Err(errors::MyError::FileAlreadyExist)
+        return Err(errors::MyError::ErrFile(errors::ErrFile::FileAlreadyExist))
     } else if Path::new(&current_file_name).exists() {
         println!("{}{}{}", "No need to create this files. The ".red(), current_file_name.red(), " is already exist.".red());
-        return Err(errors::MyError::FileAlreadyExist)
+        return Err(errors::MyError::ErrFile(errors::ErrFile::FileAlreadyExist))
     }
     let mut file = File::options()
         .write(true)
@@ -90,11 +90,11 @@ pub fn show_and_select_index(file: File, action: &str) -> Result<(usize, Vec<Str
         Ok(i) => i,
         Err(e) => {
             eprintln!("Invalid number: {}", e);
-            return Err(MyError::CannotParse);
+            return Err(MyError::ErrInput(errors::ErrInput::BadInput));
         }
     };
     if transf_input_to_int + 1 > table_line.len() - HEADER_SIZE {
-        return Err(errors::MyError::ValueOutIndex);
+        return Err(errors::MyError::ErrInput(errors::ErrInput::ValueOutIndex));
     };
     if action == "remove" {
         if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
@@ -132,7 +132,7 @@ pub fn replace_file(
         "add" => {
             use crate::action::add;
             let Some(table_line) = add::add_task(file, file_name.clone()) else {
-                return Err(errors::MyError::BadInput);
+                return Err(errors::MyError::ErrInput(errors::ErrInput::BadInput));
             };
             (0, table_line)
         },

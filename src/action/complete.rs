@@ -4,7 +4,7 @@ use crate::{HEADER_SIZE, manage_file::{self}};
 use crate::errors::{self};
 
 pub fn complete_action(args: &[String]) -> Result<(), errors::MyError> {
-    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ActionNeeded)?;
+    let file_name: &String = args.first().ok_or_else(|| errors::MyError::ErrArg(errors::ErrArg::ArgNeedFile))?;
     manage_file::replace_file(file_name, complete_file, "complete task")?;
     Ok(())
 }
