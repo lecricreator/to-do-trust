@@ -46,9 +46,14 @@ echo 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.zshrc"
 echo 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.zshrc"
 source ~/.zshrc
 ```
+# use of AI
+- This project was entirely created by **Lecricreator**.<br/>
+- The creator asked at ai only **one question per day**.
+- The only use was to understand Rust concepts.
+- This project **never copied AI-generated code** and always wrote it **himself**.
 
 # Personal experience <br />
-First project create in Rust.<br />
+### **First project create in Rust.**<br />
 The goal was to terminate a project in Rust for see all the process and the mentality.<br />
 I learn :
 - managing file (open, write, read).
@@ -57,5 +62,4 @@ I learn :
 - use lib color for have color in the terminal.
 
 <br/>
-Total hour of work on todotrust :
-~50h
+Total hour of work on todotrust : ~50h
