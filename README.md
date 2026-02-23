@@ -10,7 +10,7 @@
 └─────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 # to-do-listing
-Create my own to-do-list in Rust for learnig Rust.
+An simple to do list for your shopping and your session code.
 
 <img src="https://github.com/user-attachments/assets/69ed8762-ef67-4e45-888b-2a5f19ed9e87" alt="gif show functionnality of todotrust" title="show todotrust" width="900"/>
 
@@ -19,12 +19,7 @@ Create my own to-do-list in Rust for learnig Rust.
 On Linux terminal
 ```sh
 curl https://sh.rustup.rs -sSf | sh
-``` 
-On windows
-On Windows, download and run [rustup-init.exe]()
-
-or other
-[More information for install Cargo](https://doc.rust-lang.org/cargo/getting-started/installation.html)
+```
 
 On linux terminal copy this command<br/>
 ```
@@ -34,7 +29,7 @@ cd $HOME/todotrust
 cargo build --release
 cp ./target/release/todotrust .
 ```
-Make shortcut for use when you want.
+### Make a shortcut<br/>
 Verified if your on bash or zsh with this command :
 ```
 echo $SHELL
@@ -51,3 +46,16 @@ echo 'alias todotrust="$HOME/todotrust/todotrust"' >> "$HOME/.zshrc"
 echo 'export TODORUST_FILE="$HOME/todotrust"' >> "$HOME/.zshrc"
 source ~/.zshrc
 ```
+
+# Personal experience <br />
+First project create in Rust.<br />
+The goal was to terminate a project in Rust for see all the process and the mentality.<br />
+I learn :
+- managing file (open, write, read).
+- rename (replace file).
+- managing error and use lib thisError for more possibility
+- use lib color for have color in the terminal.
+
+<br/>
+Total hour of work on todotrust :
+~50h
