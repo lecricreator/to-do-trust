@@ -30,7 +30,7 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
         .lines()
         .filter_map(|line| {
             let mut line_string = line.ok()?;
-            if line_string.starts_with('✅') {
+            if line_string.starts_with("  ✅") {
                 nbr_complete += 1;
             }
             println!("{}", line_string);
@@ -62,7 +62,7 @@ pub fn add_task(file: File, _name_file: String) -> Option<Vec<String>> {
         input_task = format!("{}.", &input_task[..17]);
     }
     let content_file = format!(
-        "❌   | {:^19}| {}\n",
+        "  ❌  | {:^19}| {}\n",
         input_task.trim().bold().blue(),
         input_commentary.trim().green()
     );

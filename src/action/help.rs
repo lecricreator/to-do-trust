@@ -2,7 +2,7 @@ use colored::Colorize;
 
 pub fn help_action() {
 
-    println!("To-do-(t)rust-list is a to-do-list in the terminal.\n\nYou can use todotrust in all folder you want.\nThe file is create in the '~/todotrust' file if you make the correct export.\n");
+    println!("To-do-(t)rust-list is a to-do-list in the terminal.\n\nYou can use todotrust in all folder you want.\nThe file is create in the '~/todotrust' file.\n");
     
     println!("{} : Create a new to-do-trust.
             {} {} {}.\n", "new        ".green(), "todotrust".yellow(), "new".green(), "name_of_todoR_file".blue());

@@ -17,7 +17,6 @@ pub fn open_file(file_name: &String) -> Result<File, errors::MyError> {
     let todotrust_path = env::var("TODORUST_FILE")?;
     let total_file_name = format!("{todotrust_path}/{file_name}.todoR");
     let current_file_name = format!("{todotrust_path}/{file_name}");
-    println!("{}", total_file_name);
     if Path::new(&total_file_name).exists() {
         return Ok(File::open(total_file_name)?)
     }else if Path::new(&current_file_name).exists() {
@@ -43,15 +42,15 @@ pub fn create_file(name_file: &String) -> Result<File, errors::MyError>{
         .create(true)
         .open(&total_file_name)?;
     println!(
-        "Create the file {total_file_name}.\nNow you can add for add goal or show for showing the to-do-rustlist."
+        "Create the file {total_file_name}.\nNow you can add for add goal or show for showing the to-do-trustlist."
     );
-    let _ = writeln!(
+    writeln!(
         file,
-        "progression: 0/0\nDONE |        TASK        | COMMENTARY        "
+        "progression: 0/0\n DONE |        TASK        | COMMENTARY        "
     )?;
-    _ = writeln!(
+    writeln!(
         file,
-        "-----|--------------------|--------------------------------------------------"
+        "------|--------------------|--------------------------------------------------"
     )?;
     Ok(file)
 }
@@ -97,20 +96,24 @@ pub fn show_and_select_index(file: File, action: &str) -> Result<(usize, Vec<Str
         return Err(errors::MyError::ErrInput(errors::ErrInput::ValueOutIndex));
     };
     if action == "remove" {
-        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
-            nbr_complete -= 1;
+        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("  ✅") && nbr_complete > 0 {
+            if nbr_complete > 0 {
+                nbr_complete -= 1;
+            }
         }
         table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE - 1);
     } else if action == "complete task" {
-        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("❌") {
+        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("  ❌") {
             nbr_complete += 1;
         } else {
             return Err(errors::MyError::AlreadyComplete)
         }
         table_line[0] = format!("progression: {}/{}\n", nbr_complete, table_line.len() - HEADER_SIZE);
     } else if action == "uncomplete task" {
-        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("✅") {
-            nbr_complete -= 1;
+        if table_line[transf_input_to_int + HEADER_SIZE].starts_with("  ✅") {
+            if nbr_complete > 0 {
+                nbr_complete -= 1;
+            }
         } else {
             return Err(errors::MyError::AlreadyUncomplete)
         }

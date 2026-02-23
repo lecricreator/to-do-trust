@@ -1,6 +1,7 @@
 use std::{fs::{self}};
 use crate::errors;
 use std::env;
+use colored::Colorize;
 
 pub fn list_action() -> Result<(), errors::MyError>{
     let todotrust_path = env::var("TODORUST_FILE")?;
@@ -19,9 +20,9 @@ pub fn list_action() -> Result<(), errors::MyError>{
             }
         }
     }
-    println!("You have {} todoR.", table_str.len());
+    println!("{}{}{}", "You have ".cyan(), table_str.len(), " todoR file.".cyan());
     for i in table_str {
-        println!("{i}");
+        println!("{}", i);
     }
     Ok(())
 }
