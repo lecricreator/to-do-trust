@@ -12,6 +12,7 @@
 # to-do-listing
 Create my own to-do-list in Rust for learnig Rust.
 
+<img src="https://github.com/user-attachments/assets/69ed8762-ef67-4e45-888b-2a5f19ed9e87" alt="Databay showcase gif" title="Databay showcase gif" width="900"/>
 
 # Installation
 ### Start to install cargo for compile language Rust.<br/>
